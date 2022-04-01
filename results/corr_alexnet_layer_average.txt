@@ -1,0 +1,70 @@
+******************************** 
+******************************** 
+Average corr with brain - Layer Average ReLu1 - randomstate 
+EVC: -0.06291726922513928 
+IT: 0.018767300795605193 
+******************************** 
+******************************** 
+Average corr with brain - Layer Average ReLu1 - pretrained 
+EVC: -0.04076062098745681 
+IT: 0.05801246234684269 
+******************************** 
+******************************** 
+Average corr with brain - Layer Average ReLu2 - randomstate 
+EVC: -0.03855381799679434 
+IT: 0.038078317399102946 
+******************************** 
+******************************** 
+Average corr with brain - Layer Average ReLu2 - pretrained 
+EVC: 0.049070635493501165 
+IT: 0.12902588740522958 
+******************************** 
+******************************** 
+Average corr with brain - Layer Average ReLu3 - randomstate 
+EVC: -0.016225990762000334 
+IT: 0.0499998016144132 
+******************************** 
+******************************** 
+Average corr with brain - Layer Average ReLu3 - pretrained 
+EVC: -0.0036485968734687535 
+IT: 0.11227803630528822 
+******************************** 
+******************************** 
+Average corr with brain - Layer Average ReLu4 - randomstate 
+EVC: -0.018929858306718027 
+IT: 0.04790691075379774 
+******************************** 
+******************************** 
+Average corr with brain - Layer Average ReLu4 - pretrained 
+EVC: -0.01640123378223441 
+IT: 0.15609027799803296 
+******************************** 
+******************************** 
+Average corr with brain - Layer Average ReLu5 - randomstate 
+EVC: -0.026516355578332287 
+IT: 0.036601280861793345 
+******************************** 
+******************************** 
+Average corr with brain - Layer Average ReLu5 - pretrained 
+EVC: 0.004796641284012367 
+IT: 0.12624975256454316 
+******************************** 
+******************************** 
+Average corr with brain - Layer Average ReLu6 - randomstate 
+EVC: -0.026551229221874455 
+IT: 0.022959551941510732 
+******************************** 
+******************************** 
+Average corr with brain - Layer Average ReLu6 - pretrained 
+EVC: 0.03898989046558947 
+IT: 0.15003237462864222 
+******************************** 
+******************************** 
+Average corr with brain - Layer Average ReLu7 - randomstate 
+EVC: -0.02880967106121369 
+IT: 0.00026226136945517686 
+******************************** 
+******************************** 
+Average corr with brain - Layer Average ReLu7 - pretrained 
+EVC: 0.026941661883623094 
+IT: 0.14947213289168673 

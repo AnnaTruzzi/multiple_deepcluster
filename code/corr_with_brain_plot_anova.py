@@ -179,7 +179,7 @@ def corr_with_brain_anova(corr_df,method):
 if __name__ == '__main__':
     corr_methods = ['mri_average','layer_average']
     for method in corr_methods:
-        corr_df = pd.read_csv(f'/home/annatruzzi/multiple_deepcluster/results/corr_{method}.csv')
+        corr_df = pd.read_csv(f'/home/annatruzzi/multiple_deepcluster/results/corr_dc_{method}.csv')
         corr_with_brain_plot(corr_df,method)
         corr_with_brain_check_dist(corr_df,method)
         corr_with_brain_anova(corr_df,method)

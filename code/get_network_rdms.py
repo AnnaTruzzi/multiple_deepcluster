@@ -55,7 +55,7 @@ def rdm_plot(rdm, vmin, vmax, labels, main, outname):
    fig.savefig('/home/annatruzzi/multiple_deepcluster/figures/rdm_plots/' + outname)
    plt.close()
 
-def main(instance,state):
+def main(net,instance,state):
     act = load_dict(act_pth)
     img_names = load_dict(img_names_pth)
     img_names = reorder_od(img_names, sorted(img_names.keys()))
@@ -89,8 +89,8 @@ def main(instance,state):
         net_rdm.append(rdm(curr_layer))
 
     for i,layer in enumerate(layers):
-        main = 'dc_%d %s - %s' %(instance,state,layer)
-        outname = 'dc%d_%s_%s' %(instance,state,layer)
+        main = '%s_%d %s - %s' %(net,instance,state,layer)
+        outname = '%s%d_%s_%s' %(net,instance,state,layer)
         print(outname)
         rdm_plot(net_rdm[i], vmin = 0, vmax = 1, labels = orderedNames, main = main, outname = outname+ '.png')
         with open(('/data/multiple_deepcluster/rdms/'+ outname + '.pickle'), 'wb') as handle:
@@ -100,15 +100,25 @@ def main(instance,state):
 ### Use this python when launching the code: /opt/anaconda3/envs/unsupervised_brain/bin/python
 if __name__ == '__main__':
     layers = ['ReLu1', 'ReLu2', 'ReLu3', 'ReLu4', 'ReLu5','ReLu6','ReLu7']
-    states = ['randomstate','100epochs']
-    instances = 11
-    #net = ['dc','alexnet']
+    states_dc = ['randomstate','100epochs']
+    instances_dc = 11
+    instances_alexnet = 2
+    states_alexnet = ['randomstate','pretrained']
+    nets = ['dc','alexnet']
     img_names_pth = '/home/annatruzzi/multiple_deepcluster/data/niko92_img_names.pickle' 
     img_names = load_dict(img_names_pth)
     img_names = reorder_od(img_names, sorted(img_names.keys()))
 
-    for instance in range(1,instances):
-        for state in states:
-            act_pth = '/data/multiple_deepcluster/activations_niko92_imgs/activations_%s_dc%d.pickle' % (state,instance)
-            main(instance, state)
+    for net in nets:
+        if net == 'dc':
+            for instance in range(1,instances_dc):
+                for state in states_dc:
+                    net = 'dc'
+                    act_pth = '/data/multiple_deepcluster/activations_niko92_imgs/activations_%s_dc%d.pickle' % (state,instance)
+                    #main(net,instance, state)
+        else:
+            for instance in range(0,instances_alexnet):
+                for state in states_alexnet:
+                    act_pth = '/data/multiple_deepcluster/activations_niko92_imgs/niko92_activations_%s_torchalexnet.pickle' % (state)
+                    main(net,instance,state)
    
