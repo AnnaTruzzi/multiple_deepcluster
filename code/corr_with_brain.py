@@ -19,7 +19,7 @@ from scipy import stats
 from scipy.spatial.distance import squareform
 import collections
 import re
-import skbio
+from skbio.stats.distance import mantel
 import seaborn as sns
 import pingouin as pg
 import pandas as pd
@@ -45,7 +45,7 @@ def corr_layer_average(layer, mri_data):
     p_list = []
     for subj in range(0,y.shape[0]):
         y_subj = squareform(squareform(y[subj],checks = False))
-        corr_value, p_value, n_value = skbio.stats.distance.mantel(x,y_subj, method = 'spearman', permutations = 10000)
+        corr_value, p_value, n_value = mantel(x,y_subj, method = 'kendalltau', permutations = 10000)
         corr_list.append(corr_value)
         p_list.append(p_value)
     return corr_list,p_list
@@ -58,7 +58,7 @@ def corr_mri_average(layer, mri_data):
     p_list = []
     for layer in range(0,x.shape[0]):
         x_layer = squareform(squareform(x[layer],checks = False))
-        corr_value, p_value, n_value = skbio.stats.distance.mantel(x_layer,y, method = 'spearman', permutations = 10000)
+        corr_value, p_value, n_value = mantel(x_layer,y, method = 'kendalltau', permutations = 10000)
         corr_list.append(corr_value)
         p_list.append(p_value)
     return corr_list,p_list
@@ -116,8 +116,7 @@ def main(list_file):
 
 if __name__ == '__main__':
     layers = ['ReLu1', 'ReLu2', 'ReLu3', 'ReLu4', 'ReLu5','ReLu6','ReLu7']
-    #nets = ['alexnet','dc']
-    nets = ['dc']
+    nets = ['alexnet','dc']
     fmri_pth = '/data/algonautsChallenge2019/Training_Data/92_Image_Set/target_fmri.mat'
     fmri_mat = loadmat(fmri_pth)
     EVC = fmri_mat['EVC_RDMs']
@@ -129,8 +128,7 @@ if __name__ == '__main__':
         if net == 'dc':
             states = ['randomstate','100epochs']
             instances = 11
-            #corr_methods = ['mri_average','layer_average']
-            corr_methods = ['layer_average','layer_average']
+            corr_methods = ['mri_average','layer_average']
         else:
             states = ['randomstate','pretrained']
             instances = 2

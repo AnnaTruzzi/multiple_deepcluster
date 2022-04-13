@@ -26,12 +26,14 @@ import pandas as pd
 import glob
 from sklearn.linear_model import LinearRegression
 import scipy
-from scipy.stats import pearsonr, spearmanr, kendalltau
+from scipy.stats import pearsonr, spearmanr
 import seaborn as sns
 from statsmodels.stats.anova import AnovaRM
 from statsmodels.formula.api import ols
 import statsmodels.api as sm
-
+from scipy.stats import kruskal
+from scipy.stats import mannwhitneyu
+from scipy.stats import wilcoxon
 
 def layers_noise_ceiling(axes):
         #### ReLu1
@@ -164,11 +166,27 @@ def corr_with_brain_check_dist(corr_df,method):
     plt.savefig(f'/home/annatruzzi/multiple_deepcluster/figures/corr_dist_{method}.png')
 
 
-def corr_with_brain_anova(corr_df,method):
-    #TODO: get one corr value for each instance? Or stick with the average across layers?
-    #TODO: not normal distribution, will have to change test to parametric version
-    print(pg.anova(data=corr_df[corr_df['ROI']=='EVC'], dv='corr', between=['layer','state']))
-    print(pg.anova(data=corr_df[corr_df['ROI']=='IT'], dv='corr', between=['layer','state']))
+def corr_with_brain_anova(corr_df,method,flag):
+    random_1 = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='randomstate') & (corr_df['layer']=='ReLu1')]['corr']
+    random_2 = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='randomstate') & (corr_df['layer']=='ReLu2')]['corr']
+    random_3 = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='randomstate') & (corr_df['layer']=='ReLu3')]['corr']
+    random_4 = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='randomstate') & (corr_df['layer']=='ReLu4')]['corr']
+    random_5 = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='randomstate') & (corr_df['layer']=='ReLu5')]['corr']
+    random_6 = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='randomstate') & (corr_df['layer']=='ReLu6')]['corr']
+    random_7 = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='randomstate') & (corr_df['layer']=='ReLu7')]['corr']
+
+    trained_1 = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='100epochs') & (corr_df['layer']=='ReLu1')]['corr']
+    trained_2 = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='100epochs') & (corr_df['layer']=='ReLu2')]['corr']
+    trained_3 = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='100epochs') & (corr_df['layer']=='ReLu3')]['corr']
+    trained_4 = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='100epochs') & (corr_df['layer']=='ReLu4')]['corr']
+    trained_5 = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='100epochs') & (corr_df['layer']=='ReLu5')]['corr']
+    trained_6 = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='100epochs') & (corr_df['layer']=='ReLu6')]['corr']
+    trained_7 = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='100epochs') & (corr_df['layer']=='ReLu7')]['corr']
+    print(flag)
+    stats = kruskal(random_1,random_2,random_3,random_4,random_5,random_6,random_7,trained_1,trained_2,trained_3,trained_4,trained_5,trained_6,trained_7)
+    print(stats)
+    #model=ols('corr ~ C(layer) + C(state) + C(layer):C(state)', data=corr_df[corr_df['ROI']=='EVC']).fit() #Specify C for Categorical
+    #print(sm.stats.anova_lm(model, typ=2))
     print('Testing for normality...')
     print(scipy.stats.shapiro(corr_df[corr_df['ROI']=='EVC']['corr']))
     print(scipy.stats.shapiro(corr_df[corr_df['ROI']=='IT']['corr']))
@@ -176,10 +194,24 @@ def corr_with_brain_anova(corr_df,method):
     print(pg.homoscedasticity(data=corr_df[corr_df['ROI']=='EVC']))
     print(pg.homoscedasticity(data=corr_df[corr_df['ROI']=='IT']))
 
+
+def posthoc_tests(corr_df,method,flag):
+    for layer in layers:
+        print(f'{flag} - {layer}')
+        dist_random = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='randomstate') & (corr_df['layer']==layer)]['corr']
+        dist_trained = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='100epochs') & (corr_df['layer']==layer)]['corr']
+        res = mannwhitneyu(dist_random, dist_trained)
+        print(res)
+
+
 if __name__ == '__main__':
     corr_methods = ['mri_average','layer_average']
+    layers = ['ReLu1','ReLu2','ReLu3','ReLu4','ReLu5','ReLu6','ReLu7']
+    ROIs = ['EVC','IT']
     for method in corr_methods:
         corr_df = pd.read_csv(f'/home/annatruzzi/multiple_deepcluster/results/corr_dc_{method}.csv')
         corr_with_brain_plot(corr_df,method)
         corr_with_brain_check_dist(corr_df,method)
-        corr_with_brain_anova(corr_df,method)
+        for ROI in ROIs:
+            corr_with_brain_anova(corr_df,method,flag=ROI)
+            posthoc_tests(corr_df,method,flag=ROI)
