@@ -1,0 +1,64 @@
+##### 
+MODELS vs BASELINE
+##### 
+#all-alexnettrained 
+Lower bound=0.06568046102577244, Upper bound=0.19423863678146777 
+Mean=0.12551873968145766, SEM=0.0003252965927186487, SD=0.03252803274823717 
+
+#all-dctrained 
+Lower bound=0.08193409675480061, Upper bound=0.21589790200634842 
+Mean=0.14640179595713984, SEM=0.0003393228573369704, SD=0.033930589076992874 
+
+#all-dcrandom 
+Lower bound=0.08870196663648791, Upper bound=0.22253284587623443 
+Mean=0.15228685779764708, SEM=0.0003382714218400593, SD=0.03382545078461069 
+
+#all-alexnettrained-with-dcrandom3 
+Lower bound=0.09699832811048369, Upper bound=0.22693820328818023 
+Mean=0.15868132702759932, SEM=0.0003311991502377883, SD=0.03311825898662568 
+
+#all-dctrained-with-dcrandom3 
+Lower bound=0.10806267410799712, Upper bound=0.24193403315101042 
+Mean=0.17247875492167883, SEM=0.00033906408122770905, SD=0.03390471275997964 
+
+#all-alexnettrained-with-dcrandom2 
+Lower bound=0.1046750736160007, Upper bound=0.24080838025664875 
+Mean=0.16914090733195838, SEM=0.0003463983926569625, SD=0.034638107230431 
+
+#all-dctrained-with-dcrandom2 
+Lower bound=0.11288891990663619, Upper bound=0.2504780143731595 
+Mean=0.17871215568007742, SEM=0.00034882742067704155, SD=0.03488099788699516 
+
+##### 
+MODELS COMPARISON
+##### 
+#all-dctrained VS all-alexnettrained 
+Lower bound=-0.020536663610234818, Upper bound=0.06475054022296681 
+
+#all-dcrandom VS all-alexnettrained 
+Lower bound=-0.04509187239814902, Upper bound=0.10307782691265822 
+
+#all-dcrandom VS all-dctrained 
+Lower bound=-0.06708740743706759, Upper bound=0.07991455410923988 
+
+#all-alexnettrained-with-dcrandom2 VS all-alexnettrained 
+Lower bound=0.0071302986322131084, Upper bound=0.09116054575227081 
+
+#all-alexnettrained-with-dcrandom2 VS all-dctrained 
+Lower bound=-0.030467787984575945, Upper bound=0.0767569467874912 
+
+#all-alexnettrained-with-dcrandom2 VS all-dcrandom 
+Lower bound=-0.03237698087402929, Upper bound=0.06659896051036793 
+
+#all-dctrained-with-dcrandom2 VS all-alexnettrained 
+Lower bound=0.0031408733797116672, Upper bound=0.10981490007591421 
+
+#all-dctrained-with-dcrandom2 VS all-dctrained 
+Lower bound=0.0008977959554466453, Upper bound=0.0731095205544202 
+
+#all-dctrained-with-dcrandom2 VS all-dcrandom 
+Lower bound=-0.025071442071868788, Upper bound=0.07915872367636753 
+
+#all-dctrained-with-dcrandom2 VS all-alexnettrained-with-dcrandom2 
+Lower bound=-0.02189139104026, Upper bound=0.04362260720810682 
+

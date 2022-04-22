@@ -38,7 +38,7 @@ def loadmat(matfile):
         return {name: np.transpose(f.get(name)) for name in f.keys()}
 
 
-def corr_layer_average(layer, mri_data):
+def corr_mri_variability(layer, mri_data):
     x = np.mean(np.asarray(layer), axis=0)
     y = mri_data
     corr_list = []
@@ -51,7 +51,7 @@ def corr_layer_average(layer, mri_data):
     return corr_list,p_list
 
 
-def corr_mri_average(layer, mri_data):
+def corr_layer_variability(layer, mri_data):
     x = np.array(layer)
     y = squareform(squareform(np.mean(np.asarray(mri_data),axis=0),checks = False))
     corr_list = []
@@ -82,12 +82,12 @@ def main(list_file):
                             rdm = pickle.load(handle)
                         all_layer_rdms.append(rdm)
                     
-                    if 'layer' in method:
-                        EVC_corr_list,EVC_pvalue_list = corr_layer_average(all_layer_rdms, EVC)
-                        IT_corr_list,IT_pvalue_list = corr_layer_average(all_layer_rdms, IT)
+                    if 'mri_variability' in method:
+                        EVC_corr_list,EVC_pvalue_list = corr_mri_variability(all_layer_rdms, EVC)
+                        IT_corr_list,IT_pvalue_list = corr_mri_variability(all_layer_rdms, IT)
                     else:
-                        EVC_corr_list,EVC_pvalue_list = corr_mri_average(all_layer_rdms, EVC)
-                        IT_corr_list,IT_pvalue_list = corr_mri_average(all_layer_rdms, IT)
+                        EVC_corr_list,EVC_pvalue_list = corr_layer_variability(all_layer_rdms, EVC)
+                        IT_corr_list,IT_pvalue_list = corr_layer_variability(all_layer_rdms, IT)
 
                     all_corr.extend(EVC_corr_list+IT_corr_list)
                     all_pvalue.extend(EVC_pvalue_list+IT_pvalue_list)
@@ -98,7 +98,7 @@ def main(list_file):
 
                     f.write('******************************** \n')
                     f.write('******************************** \n')
-                    f.write(f'Average corr with brain - Layer Average {layer} - {state} \n')
+                    f.write(f'Average corr with brain - {method} {layer} - {state} \n')
                     f.write(f'EVC: {np.mean(np.array(EVC_corr_list))} \n')
                     f.write(f'IT: {np.mean(np.array(IT_corr_list))} \n')
 
@@ -128,11 +128,11 @@ if __name__ == '__main__':
         if net == 'dc':
             states = ['randomstate','100epochs']
             instances = 11
-            corr_methods = ['mri_average','layer_average']
+            corr_methods = ['layer_variability','mri_variability']
         else:
             states = ['randomstate','pretrained']
             instances = 2
-            corr_methods = ['layer_average']
+            corr_methods = ['mri_variability']
 
         for instance in range(1,instances):
             for layer in layers:

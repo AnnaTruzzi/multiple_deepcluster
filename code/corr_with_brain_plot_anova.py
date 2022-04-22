@@ -118,7 +118,7 @@ def corr_with_brain_plot(corr_df,method):
     fig, ax = plt.subplots(nrows=2, ncols=2, figsize=(10,10))
     sns.violinplot(x='layer', y='corr', hue='state', data=corr_df[corr_df['ROI']=='EVC'], ax=ax[0,0])
     ax[0,0].set_title('Comparison to EVC')
-    if 'layer' in method:
+    if 'mri_variability' in method:
         ax[0,0].axhline(0.38, color='grey', lw=2, alpha=0.4)
         ax[0,0].axhline(0.31, color='gray', lw=2, alpha=0.4)
         ax[0,0].axhspan(0.31, 0.38, facecolor='gray', alpha=0.4)
@@ -127,7 +127,7 @@ def corr_with_brain_plot(corr_df,method):
 
     sns.violinplot(x='layer', y='corr', hue='state', data=corr_df[corr_df['ROI']=='IT'], ax=ax[0,1])
     ax[0,1].set_title('Comparison to IT')
-    if 'layer' in method:
+    if 'mri_variability' in method:
         ax[0,1].axhline(0.28, color='gray', lw=2, alpha=0.4)
         ax[0,1].axhline(0.42, color='gray', lw=2, alpha=0.4)
         ax[0,1].axhspan(0.28, 0.42, facecolor='gray', alpha=0.4)
@@ -136,7 +136,7 @@ def corr_with_brain_plot(corr_df,method):
 
     sns.lineplot(x="layer", y="corr", hue="state", data=corr_df[corr_df['ROI']=='EVC'], markers=True, dashes=False, ax=ax[1,0])    
     ax[1,0].set_title('Comparison to EVC')
-    if 'layer' in method:
+    if 'mri_variability' in method:
         ax[1,0].axhline(0.38, color='grey', lw=2, alpha=0.4)
         ax[1,0].axhline(0.31, color='gray', lw=2, alpha=0.4)
         ax[1,0].axhspan(0.31, 0.38, facecolor='gray', alpha=0.4)
@@ -145,7 +145,7 @@ def corr_with_brain_plot(corr_df,method):
 
     sns.lineplot(x="layer", y="corr", hue="state", data=corr_df[corr_df['ROI']=='IT'], markers=True, dashes=False, ax=ax[1,1])    
     ax[1,1].set_title('Comparison to IT')
-    if 'layer' in method:
+    if 'mri_variability' in method:
         ax[1,1].axhline(0.28, color='gray', lw=2, alpha=0.4)
         ax[1,1].axhline(0.42, color='gray', lw=2, alpha=0.4)
         ax[1,1].axhspan(0.28, 0.42, facecolor='gray', alpha=0.4)
@@ -193,25 +193,33 @@ def corr_with_brain_anova(corr_df,method,flag):
     print('Testing for homoscedasticity...')
     print(pg.homoscedasticity(data=corr_df[corr_df['ROI']=='EVC']))
     print(pg.homoscedasticity(data=corr_df[corr_df['ROI']=='IT']))
+    return stats
 
 
-def posthoc_tests(corr_df,method,flag):
-    for layer in layers:
+def posthoc_tests(corr_df,method,layer,flag):
         print(f'{flag} - {layer}')
         dist_random = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='randomstate') & (corr_df['layer']==layer)]['corr']
         dist_trained = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='100epochs') & (corr_df['layer']==layer)]['corr']
         res = mannwhitneyu(dist_random, dist_trained)
         print(res)
+        return res
 
 
 if __name__ == '__main__':
-    corr_methods = ['mri_average','layer_average']
+    corr_methods = ['layer_variability','mri_variability']
     layers = ['ReLu1','ReLu2','ReLu3','ReLu4','ReLu5','ReLu6','ReLu7']
     ROIs = ['EVC','IT']
     for method in corr_methods:
         corr_df = pd.read_csv(f'/home/annatruzzi/multiple_deepcluster/results/corr_dc_{method}.csv')
         corr_with_brain_plot(corr_df,method)
         corr_with_brain_check_dist(corr_df,method)
-        for ROI in ROIs:
-            corr_with_brain_anova(corr_df,method,flag=ROI)
-            posthoc_tests(corr_df,method,flag=ROI)
+        with open (f'/home/annatruzzi/multiple_deepcluster/results/corr_to_brain_analysis_{method}.txt','w') as f:
+            for ROI in ROIs:
+                f.write(f'\n ####### {ROI} \n')
+                f.write('KRUSKAL test \n')
+                stat_kruskal=corr_with_brain_anova(corr_df,method,flag=ROI)
+                f.write(f'{stat_kruskal} \n')
+                f.write('MANN WHITNEY test \n')
+                for layer in layers:
+                    posthoc = posthoc_tests(corr_df,method,layer,flag=ROI)
+                    f.write(f'{layer}: {posthoc} \n')

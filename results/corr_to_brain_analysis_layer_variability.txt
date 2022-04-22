@@ -1,0 +1,24 @@
+
+ ####### EVC 
+KRUSKAL test 
+KruskalResult(statistic=128.5164741641338, pvalue=4.1265228979538884e-21) 
+MANN WHITNEY test 
+ReLu1: MannwhitneyuResult(statistic=0.0, pvalue=9.133589555477501e-05) 
+ReLu2: MannwhitneyuResult(statistic=0.0, pvalue=9.133589555477501e-05) 
+ReLu3: MannwhitneyuResult(statistic=0.0, pvalue=9.133589555477501e-05) 
+ReLu4: MannwhitneyuResult(statistic=0.0, pvalue=9.133589555477501e-05) 
+ReLu5: MannwhitneyuResult(statistic=0.0, pvalue=9.133589555477501e-05) 
+ReLu6: MannwhitneyuResult(statistic=0.0, pvalue=9.133589555477501e-05) 
+ReLu7: MannwhitneyuResult(statistic=0.0, pvalue=9.133589555477501e-05) 
+
+ ####### IT 
+KRUSKAL test 
+KruskalResult(statistic=127.96729483282684, pvalue=5.3061118906614704e-21) 
+MANN WHITNEY test 
+ReLu1: MannwhitneyuResult(statistic=0.0, pvalue=9.133589555477501e-05) 
+ReLu2: MannwhitneyuResult(statistic=0.0, pvalue=9.133589555477501e-05) 
+ReLu3: MannwhitneyuResult(statistic=0.0, pvalue=9.133589555477501e-05) 
+ReLu4: MannwhitneyuResult(statistic=0.0, pvalue=9.133589555477501e-05) 
+ReLu5: MannwhitneyuResult(statistic=4.0, pvalue=0.00029141997158963715) 
+ReLu6: MannwhitneyuResult(statistic=0.0, pvalue=9.133589555477501e-05) 
+ReLu7: MannwhitneyuResult(statistic=0.0, pvalue=9.133589555477501e-05) 

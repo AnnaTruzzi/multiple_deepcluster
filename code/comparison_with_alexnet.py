@@ -84,25 +84,32 @@ def corr_with_brain_anova(corr_df,flag):
     print('Testing for homoscedasticity...')
     print(pg.homoscedasticity(data=corr_df[corr_df['ROI']=='EVC']))
     print(pg.homoscedasticity(data=corr_df[corr_df['ROI']=='IT']))
+    return stats
 
 
-def posthoc_tests(corr_df,flag):
-    for layer in layers:
+def posthoc_tests(corr_df,layer,flag):
         print(f'{flag} - {layer}')
         dist_random = corr_df[(corr_df['ROI']==flag) & (corr_df['net_type']=='dcrandomstate') & (corr_df['layer']==layer)]['corr']
         dist_trained = corr_df[(corr_df['ROI']==flag) & (corr_df['net_type']=='alexnetpretrained') & (corr_df['layer']==layer)]['corr']
         res = mannwhitneyu(dist_random, dist_trained)
         print(res)
-
+        return res
 
 if __name__ == '__main__':
     layers = ['ReLu1','ReLu2','ReLu3','ReLu4','ReLu5','ReLu6','ReLu7']
-    corr_dc = pd.read_csv(f'/home/annatruzzi/multiple_deepcluster/results/corr_dc_layer_average.csv')
-    corr_alexnet = pd.read_csv(f'/home/annatruzzi/multiple_deepcluster/results/corr_alexnet_layer_average.csv')
+    corr_dc = pd.read_csv(f'/home/annatruzzi/multiple_deepcluster/results/corr_dc_mri_variability.csv')
+    corr_alexnet = pd.read_csv(f'/home/annatruzzi/multiple_deepcluster/results/corr_alexnet_mri_variability.csv')
     corr_df = pd.concat([corr_dc,corr_alexnet])
     corr_df['net_type'] = corr_df['net']+corr_df['state']
     ROIs = ['EVC','IT']
     corr_with_brain_plot(corr_df[corr_df['net_type']!='alexnetrandomstate'])
-    for ROI in ROIs:
-        corr_with_brain_anova(corr_df[corr_df['net_type']!='alexnetrandomstate'],flag=ROI)
-        posthoc_tests(corr_df[(corr_df['net_type']!='alexnetrandomstate') & (corr_df['net_type']!='dc100epochs')],flag=ROI)
+    with open (f'/home/annatruzzi/multiple_deepcluster/results/corr_to_brain_analysis_alexnet_comparison.txt','w') as f:
+        for ROI in ROIs:
+            f.write(f'\n ####### {ROI} \n')
+            f.write('KRUSKAL test \n')
+            stat_kruskal = corr_with_brain_anova(corr_df[corr_df['net_type']!='alexnetrandomstate'],flag=ROI)
+            f.write(f'{stat_kruskal} \n')
+            f.write('MANN WHITNEY test \n')
+            for layer in layers:
+                posthoc = posthoc_tests(corr_df[(corr_df['net_type']!='alexnetrandomstate') & (corr_df['net_type']!='dc100epochs')],layer,flag=ROI)
+                f.write(f'{layer}: {posthoc} \n')
