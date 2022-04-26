@@ -43,12 +43,26 @@ def main():
     g1=sns.violinplot(x='net',y='corr',data=df_layer2)
     g1.set_xticklabels(g1.get_xticklabels(), size = 5)
     plt.suptitle('Addition of layer 2 from random dc')
+    plt.ylim((0,0.4))
+    g1.text(0, 0.30, "a", ha='center', va='bottom',fontsize = 10)  
+    g1.text(1, 0.30, "ab", ha='center', va='bottom',fontsize = 10)  
+    g1.text(2, 0.35, "ab", ha='center', va='bottom',fontsize = 10)  
+    g1.text(3, 0.35, "b", ha='center', va='bottom',fontsize = 10)  
+    g1.text(4, 0.35, "b", ha='center', va='bottom',fontsize = 10)  
     plt.savefig('/home/annatruzzi/multiple_deepcluster/figures/bootstrapping_plots_withdcrandomd_layer2.png')
+    plt.close()
 
     g2=sns.violinplot(x='net',y='corr',data=df_layer2)
     g2.set_xticklabels(g2.get_xticklabels(), size = 5)
+    plt.ylim((0,0.4))
+    g2.text(0, 0.30, "a", ha='center', va='bottom',fontsize = 10)  
+    g2.text(1, 0.30, "ab", ha='center', va='bottom',fontsize = 10)  
+    g2.text(2, 0.35, "ab", ha='center', va='bottom',fontsize = 10)  
+    g2.text(3, 0.35, "b", ha='center', va='bottom',fontsize = 10)  
+    g2.text(4, 0.35, "ab", ha='center', va='bottom',fontsize = 10)  
     plt.suptitle('Addition of layer 3 from random dc')
     plt.savefig('/home/annatruzzi/multiple_deepcluster/figures/bootstrapping_plots_withdcrandom_layer3.png')
+    plt.close()
     a=1
 
 if __name__ == '__main__':

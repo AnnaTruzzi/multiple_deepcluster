@@ -62,3 +62,24 @@ Lower bound=-0.025071442071868788, Upper bound=0.07915872367636753
 #all-dctrained-with-dcrandom2 VS all-alexnettrained-with-dcrandom2 
 Lower bound=-0.02189139104026, Upper bound=0.04362260720810682 
 
+#all-alexnettrained-with-dcrandom3 VS all-alexnettrained 
+Lower bound=0.00037761751867490534, Upper bound=0.07831856920568482 
+
+#all-alexnettrained-with-dcrandom3 VS all-dctrained 
+Lower bound=-0.04024686827446228, Upper bound=0.06576354594710011 
+
+#all-alexnettrained-with-dcrandom3 VS all-dcrandom 
+Lower bound=-0.045941479817636466, Upper bound=0.057745265220603734 
+
+#all-dctrained-with-dcrandom3 VS all-alexnettrained 
+Lower bound=-0.0017158098115335335, Upper bound=0.10040111825839737 
+
+#all-dctrained-with-dcrandom3 VS all-dctrained 
+Lower bound=-0.0028949356829139905, Upper bound=0.06568303526773953 
+
+#all-dctrained-with-dcrandom3 VS all-dcrandom 
+Lower bound=-0.034113747471950284, Upper bound=0.07486474891702677 
+
+#all-dctrained-with-dcrandom3 VS all-alexnettrained-with-dcrandom3 
+Lower bound=-0.01922142441641335, Upper bound=0.05005361269444561 
+

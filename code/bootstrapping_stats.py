@@ -48,7 +48,9 @@ def main():
     comparisons = [ ['all-dctrained','all-alexnettrained'],
                     ['all-dcrandom','all-alexnettrained'],['all-dcrandom','all-dctrained'],
                     ['all-alexnettrained-with-dcrandom2','all-alexnettrained'],['all-alexnettrained-with-dcrandom2','all-dctrained'],['all-alexnettrained-with-dcrandom2','all-dcrandom'],
-                    ['all-dctrained-with-dcrandom2','all-alexnettrained'],['all-dctrained-with-dcrandom2','all-dctrained'],['all-dctrained-with-dcrandom2','all-dcrandom'],['all-dctrained-with-dcrandom2','all-alexnettrained-with-dcrandom2']]
+                    ['all-dctrained-with-dcrandom2','all-alexnettrained'],['all-dctrained-with-dcrandom2','all-dctrained'],['all-dctrained-with-dcrandom2','all-dcrandom'],['all-dctrained-with-dcrandom2','all-alexnettrained-with-dcrandom2'],
+                    ['all-alexnettrained-with-dcrandom3','all-alexnettrained'],['all-alexnettrained-with-dcrandom3','all-dctrained'],['all-alexnettrained-with-dcrandom3','all-dcrandom'],
+                    ['all-dctrained-with-dcrandom3','all-alexnettrained'],['all-dctrained-with-dcrandom3','all-dctrained'],['all-dctrained-with-dcrandom3','all-dcrandom'],['all-dctrained-with-dcrandom3','all-alexnettrained-with-dcrandom3']]
 
     ### model vs baseline
     with open('/home/annatruzzi/multiple_deepcluster/results/CombinedModels_BootstrappingStats.txt','w') as f:
