@@ -1,7 +1,7 @@
 ====================
 alexnettrained VS IT 
 ====================
-Results for ReLu7 
+Results for ReLu2 
 
                           path          coef            se           pval      CI[2.5%]     CI[97.5%]  sig
          semantic_category ~ X  2.121714e-01  2.691441e-02   4.039958e-15  1.594049e-01  2.649380e-01  Yes

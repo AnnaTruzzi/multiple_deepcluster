@@ -212,9 +212,14 @@ def main():
         feat_rdms[k]=feat_rdms[k]-np.mean(feat_rdms[k])
 
 
-    test_ROIs = ['IT','EVC']
-    test_nets = ['dcrandom','dctrained','alexnettrained']
+    test_ROIs=['IT','EVC']
+    test_nets=['dcrandom','dctrained','alexnettrained']
     test_layers=['ReLu2','ReLu7']
+    proportion_list=[]
+    type_list=[]
+    ROI_list=[]
+    net_list=[]
+    out_layer_list=[]
 
     for test_ROI in test_ROIs:
         for test_net in test_nets:
@@ -223,7 +228,7 @@ def main():
                 f.write(f'{test_net} VS {test_ROI} \n')
                 f.write('=' * 20 + '\n')
                 for test_layer in test_layers:
-                    f.write(f'Results for {layer} \n')
+                    f.write(f'Results for {test_layer} \n')
                     print(test_ROI)
                     print(test_net)
                     print(test_layer)
@@ -240,6 +245,12 @@ def main():
                     tot=float(res['coef'][res['path']=='Total'])
                     direct=float(res['coef'][res['path']=='Direct'])
 
+                    proportion_list.extend([perc_indirect,sem_indirect])
+                    type_list.extend(['perceptual','semantic'])
+                    ROI_list.extend(np.repeat(test_ROI,2))
+                    net_list.extend(np.repeat(test_net,2))
+                    out_layer_list.extend(np.repeat(test_layer,2))
+
                     print('Indirect perceptual %.3f  semantic %.3f'%(perc_indirect, sem_indirect))
                     print('Proportion of total for indirect perceptual %0.3f  semantic %0.3f'%(perc_indirect/tot, sem_indirect/tot))
                     print('Proportion of total for indirect overall %0.3f'%((perc_indirect+sem_indirect)/tot))
@@ -252,7 +263,13 @@ def main():
                     f.write('\n' + 'Proportion of total for indirect overall %0.3f'%((perc_indirect+sem_indirect)/tot))
                     f.write('\n')
 
-
+    out_dict = {'proportion': proportion_list,
+                'type': type_list,
+                'ROI': ROI_list,
+                'net': net_list,
+                'layer': out_layer_list}
+    out_df = pd.DataFrame(out_dict)
+    out_df.to_csv('/home/annatruzzi/multiple_deepcluster/results/mediation_proportion_to_total.csv')
 
 if __name__ == '__main__':
     layers = ['ReLu1', 'ReLu2', 'ReLu3', 'ReLu4', 'ReLu5','ReLu6','ReLu7']

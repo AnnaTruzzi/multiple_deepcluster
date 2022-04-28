@@ -1,7 +1,7 @@
 ====================
 dcrandom VS EVC 
 ====================
-Results for ReLu7 
+Results for ReLu2 
 
                           path          coef            se           pval      CI[2.5%]     CI[97.5%]  sig
          semantic_category ~ X -8.594128e-04  7.300581e-01   9.990608e-01 -1.432161e+00  1.430442e+00   No

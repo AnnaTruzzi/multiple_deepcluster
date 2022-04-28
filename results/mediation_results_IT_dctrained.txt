@@ -1,7 +1,7 @@
 ====================
 dctrained VS IT 
 ====================
-Results for ReLu7 
+Results for ReLu2 
 
                           path          coef            se           pval      CI[2.5%]     CI[97.5%]  sig
          semantic_category ~ X  1.057595e-01  3.597038e-02   3.298140e-03  3.523848e-02  1.762806e-01  Yes
