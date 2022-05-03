@@ -1,0 +1,57 @@
+##### 
+T TESTs
+##### 
+##### 
+MODELS COMPARISON
+##### 
+#all-dctrained VS all-alexnettrained 
+t=-8.069398426623288e-14, p=0.9999999999999356 
+
+#all-dcrandom VS all-alexnettrained 
+t=9.239995321344494e-14, p=0.9999999999999263 
+
+#all-dcrandom VS all-dctrained 
+t=1.3923434010506275e-13, p=0.999999999999889 
+
+#all-alexnettrained-with-dcrandom2 VS all-alexnettrained 
+t=-7.366166576470113e-15, p=0.9999999999999941 
+
+#all-alexnettrained-with-dcrandom2 VS all-dctrained 
+t=5.867525561698157e-14, p=0.9999999999999531 
+
+#all-alexnettrained-with-dcrandom2 VS all-dcrandom 
+t=-1.4521018492784995e-13, p=0.9999999999998841 
+
+#all-dctrained-with-dcrandom2 VS all-alexnettrained 
+t=-1.3947677461746552e-14, p=0.9999999999999889 
+
+#all-dctrained-with-dcrandom2 VS all-dctrained 
+t=7.214439736053038e-14, p=0.9999999999999425 
+
+#all-dctrained-with-dcrandom2 VS all-dcrandom 
+t=-1.4602546650426496e-13, p=0.9999999999998834 
+
+#all-dctrained-with-dcrandom2 VS all-alexnettrained-with-dcrandom2 
+t=-1.2945073446043189e-14, p=0.9999999999999897 
+
+#all-alexnettrained-with-dcrandom3 VS all-alexnettrained 
+t=4.2550365193836203e-14, p=0.999999999999966 
+
+#all-alexnettrained-with-dcrandom3 VS all-dctrained 
+t=9.60812243168438e-14, p=0.9999999999999234 
+
+#all-alexnettrained-with-dcrandom3 VS all-dcrandom 
+t=-9.941558605921856e-14, p=0.9999999999999207 
+
+#all-dctrained-with-dcrandom3 VS all-alexnettrained 
+t=-4.007571031866089e-14, p=0.999999999999968 
+
+#all-dctrained-with-dcrandom3 VS all-dctrained 
+t=3.913580030744884e-14, p=0.9999999999999687 
+
+#all-dctrained-with-dcrandom3 VS all-dcrandom 
+t=-1.6399040417005026e-13, p=0.9999999999998692 
+
+#all-dctrained-with-dcrandom3 VS all-alexnettrained-with-dcrandom3 
+t=-1.0924579628660465e-13, p=0.9999999999999128 
+

@@ -221,8 +221,8 @@ def main(layers):
             f.write(' Upper noise ceiling %f +/- %f'%(np.mean(corr_nu_xvalmean),scipy.stats.sem(corr_nu_xvalmean)) + '\n')
             f.write('\n')
 
-        #with open('/home/annatruzzi/multiple_deepcluster/results/CombinedRegressionModels_BootstrappingValues_NNLS.pickle', 'wb') as handle:
-            #pickle.dump(out_corr_model, handle)
+        with open('/home/annatruzzi/multiple_deepcluster/results/CombinedRegressionModels_BootstrappingValues_NNLS.pickle', 'wb') as handle:
+            pickle.dump(out_corr_model, handle)
 
 
 if __name__ == '__main__':
