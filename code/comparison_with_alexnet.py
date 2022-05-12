@@ -29,22 +29,47 @@ import scipy
 from scipy.stats import pearsonr, spearmanr, kendalltau,kruskal
 import seaborn as sns
 from scipy.stats import mannwhitneyu
+from scipy.stats import wilcoxon
 
-def corr_with_brain_plot(dataframe):
+def corr_with_brain_plot(dataframe,flag):
+    if flag != 'with_dctrained':
+        dataframe = dataframe[dataframe['net_type']!='dc100epochs']
+        costum_palette = [sns.xkcd_rgb['blue'],sns.xkcd_rgb['green']]
+        sns.set_palette(costum_palette)
+    else:
+        costum_palette = [sns.xkcd_rgb['blue'],sns.xkcd_rgb['orange'],sns.xkcd_rgb['green']]
+        sns.set_palette(costum_palette)
     fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(10,5))
-    sns.lineplot(x="layer", y="corr", hue="net_type", data=dataframe[dataframe['ROI']=='EVC'], markers=True, dashes=False, ax=ax[0])    
+    sns.lineplot(x="layer", y="corr", hue="net_type", data=dataframe[dataframe['ROI']=='EVC'], markers=True, dashes=False, ax=ax[0],legend=False)    
+    ax[0].set_ylim((-0.05,0.45))
     ax[0].set_title('Comparison to EVC')
     ax[0].axhline(0.38, color='grey', lw=2, alpha=0.4)
     ax[0].axhline(0.31, color='gray', lw=2, alpha=0.4)
     ax[0].axhspan(0.31, 0.38, facecolor='gray', alpha=0.4)
-
-    sns.lineplot(x="layer", y="corr", hue="net_type", data=dataframe[dataframe['ROI']=='IT'], markers=True, dashes=False, ax=ax[1])    
+        
+    sns.lineplot(x="layer", y="corr", hue="net_type", data=dataframe[dataframe['ROI']=='IT'], markers=True, dashes=False, ax=ax[1],legend=False)    
     ax[1].set_title('Comparison to IT')
+    ax[1].set_ylim((-0.05,0.45))
     ax[1].axhline(0.28, color='gray', lw=2, alpha=0.4)
     ax[1].axhline(0.42, color='gray', lw=2, alpha=0.4)
     ax[1].axhspan(0.28, 0.42, facecolor='gray', alpha=0.4)
 
-    plt.savefig(f'/home/annatruzzi/multiple_deepcluster/figures/comparison_to_alexnet.png')
+    if flag != 'with_dctrained':
+        ax[0].text(0, 0.15, "***", ha='center', va='bottom', fontsize=10)
+        ax[0].text(1, 0.20, "***", ha='center', va='bottom', fontsize=10)
+        ax[0].text(2, 0.18, "***", ha='center', va='bottom', fontsize=10)
+        ax[0].text(3, 0.18, "***", ha='center', va='bottom', fontsize=10)
+        ax[0].text(4, 0.18, "***", ha='center', va='bottom', fontsize=10)
+        ax[0].text(5, 0.18, "**", ha='center', va='bottom', fontsize=10)
+        ax[0].text(6, 0.18, "**", ha='center', va='bottom', fontsize=10)
+
+        ax[1].text(0, 0.15, "***", ha='center', va='bottom', fontsize=10)
+        ax[1].text(1, 0.20, "***", ha='center', va='bottom', fontsize=10)
+        ax[1].text(2, 0.18, "**", ha='center', va='bottom', fontsize=10)
+        ax[1].text(3, 0.18, "*", ha='center', va='bottom', fontsize=10)
+        ax[1].text(4, 0.18, "**", ha='center', va='bottom', fontsize=10)
+
+    plt.savefig(f'/home/annatruzzi/multiple_deepcluster/figures/comparison_to_alexnet{flag}.png')
 
 
 def corr_with_brain_anova(corr_df,flag):
@@ -91,7 +116,7 @@ def posthoc_tests(corr_df,layer,flag):
         print(f'{flag} - {layer}')
         dist_random = corr_df[(corr_df['ROI']==flag) & (corr_df['net_type']=='dcrandomstate') & (corr_df['layer']==layer)]['corr']
         dist_trained = corr_df[(corr_df['ROI']==flag) & (corr_df['net_type']=='alexnetpretrained') & (corr_df['layer']==layer)]['corr']
-        res = mannwhitneyu(dist_random, dist_trained)
+        res = wilcoxon(dist_random, dist_trained)
         print(res)
         return res
 
@@ -102,14 +127,16 @@ if __name__ == '__main__':
     corr_df = pd.concat([corr_dc,corr_alexnet])
     corr_df['net_type'] = corr_df['net']+corr_df['state']
     ROIs = ['EVC','IT']
-    corr_with_brain_plot(corr_df[corr_df['net_type']!='alexnetrandomstate'])
+    plot_flags = ['with_dctrained','']
+    for plot_flag in plot_flags:
+        corr_with_brain_plot(corr_df[corr_df['net_type']!='alexnetrandomstate'],plot_flag)
     with open (f'/home/annatruzzi/multiple_deepcluster/results/corr_to_brain_analysis_alexnet_comparison.txt','w') as f:
         for ROI in ROIs:
             f.write(f'\n ####### {ROI} \n')
             f.write('KRUSKAL test \n')
             stat_kruskal = corr_with_brain_anova(corr_df[corr_df['net_type']!='alexnetrandomstate'],flag=ROI)
             f.write(f'{stat_kruskal} \n')
-            f.write('MANN WHITNEY test \n')
+            f.write('Wilcoxon test \n')
             for layer in layers:
                 posthoc = posthoc_tests(corr_df[(corr_df['net_type']!='alexnetrandomstate') & (corr_df['net_type']!='dc100epochs')],layer,flag=ROI)
                 f.write(f'{layer}: {posthoc} \n')

@@ -120,58 +120,50 @@ def main(layers):
     corr_kt={}
     out_corr_model={}
 
-    with open('/home/annatruzzi/multiple_deepcluster/results/CombinedRegressionModels_results_NNLS_debug.txt', 'w') as f:
-        for model in model_list:
-            print('***' + model['name'])
-            f.write('\n' + '#' * 20 + '\n')
-            f.write('***' + model['name'] + '\n')
+    with open('/home/annatruzzi/multiple_deepcluster/results/CombinedRegressionModels_results_NNLS.txt', 'w') as f:
+        np.random.seed(1234)
+        # Storrs method
+        nbootstraps=10000
+        ncrossvals=20
+        nsubj=IT.shape[0]
+        nstim=IT.shape[1]
+        ntestsubj=4
+        nteststim=12
+        corr_model=np.zeros((nbootstraps,ncrossvals,len(model_list)))   # model
+        corr_nl=np.zeros((nbootstraps,ncrossvals,len(model_list)))    # noise lower
+        corr_nu=np.zeros((nbootstraps,ncrossvals,len(model_list)))    # noise upper
+        for bootstrap in range(nbootstraps):
+            print(bootstrap)
+            # Bootstrap subjects and stimuli by resampling with replacement
+            subject_bootstrap=np.random.choice(nsubj, nsubj, replace=True)
+            stim_bootstrap=np.random.choice(nstim, nstim, replace=True)
+            
+            # For noise ceiling - upper bound, average of all subjects in this bootstrap 
+            allsubjITmean=np.mean(IT[subject_bootstrap,:,:], axis=0)
 
-            # Holds order consistent
-            layers=list(model['dict'].keys())
+            for crossval in range(ncrossvals):
+                #print(crossval)
+                # Pick test subjects and stimuli from bootstrap by resampling without replacement
+                testsubj=np.random.choice(subject_bootstrap, ntestsubj, replace=False)
+                teststim=np.random.choice(stim_bootstrap, nteststim, replace=False)
+                # Bootstrap samples from other subjects/stimuli are for training
+                trainsubj=[x for x in subject_bootstrap if x not in testsubj]
+                trainstim=[x for x in stim_bootstrap if x not in teststim]
+                # Mean train RDM
+                trainITmean=squareform(np.mean(IT[trainsubj,:,:][:,trainstim,:][:,:,trainstim],0).squeeze(), checks=False)
+               # Get DNN layer rdms
+                for i,model in enumerate(model_list):
+                    #print('***' + model['name'])
+                    #f.write('\n' + '#' * 20 + '\n')
+                    #f.write('***' + model['name'] + '\n')
 
-            np.random.seed(1234)
-            # Storrs method
-            nbootstraps=10000
-            ncrossvals=20
-            nsubj=IT.shape[0]
-            nstim=IT.shape[1]
-            ntestsubj=4
-            nteststim=12
-            corr_model=np.zeros((nbootstraps,ncrossvals))   # model
-            corr_nl=np.zeros((nbootstraps,ncrossvals))    # noise lower
-            corr_nu=np.zeros((nbootstraps,ncrossvals))    # noise upper
-            for bootstrap in range(nbootstraps):
-                print(bootstrap)
-                # Bootstrap subjects and stimuli by resampling with replacement
-                subject_bootstrap=np.random.choice(nsubj, nsubj, replace=True)
-                stim_bootstrap=np.random.choice(nstim, nstim, replace=True)
-                
-                # For noise ceiling - upper bound, average of all subjects in this bootstrap 
-                allsubjITmean=np.mean(IT[subject_bootstrap,:,:], axis=0)
-
-                for crossval in range(ncrossvals):
-                    #print(crossval)
-                    # Pick test subjects and stimuli from bootstrap by resampling without replacement
-                    testsubj=np.random.choice(subject_bootstrap, ntestsubj, replace=False)
-                    teststim=np.random.choice(stim_bootstrap, nteststim, replace=False)
-                    # Bootstrap samples from other subjects/stimuli are for training
-                    trainsubj=[x for x in subject_bootstrap if x not in testsubj]
-                    trainstim=[x for x in stim_bootstrap if x not in teststim]
-                    # Mean train RDM
-                    trainITmean=squareform(np.mean(IT[trainsubj,:,:][:,trainstim,:][:,:,trainstim],0).squeeze(), checks=False)
-                    # Get DNN layer rdms
+                    # Holds order consistent
+                    layers=list(model['dict'].keys()) 
+                    
                     trainX=np.array([squareform(model['dict'][k][trainstim,:][:,trainstim]) for k in layers]).T
                     # Mean centre 
                     trainX=trainX-np.mean(trainX,0)[np.newaxis,:]
                     trainITmean=trainITmean-np.mean(trainITmean)
-                    
-                    '''# Fit layer RDMs to IT (second level fitting in Storrs)
-                    regr=sklearn.linear_model.LinearRegression()
-                    regr.fit(trainX,trainITmean)
-                    # Predict for other subjects and stimuli. 
-                    #  Get this weighted model
-                    testX=np.array([squareform(model['dict'][k][teststim,:][:,teststim]) for k in layers])
-                    testXweightedmean=np.mean(regr.coef_[:,np.newaxis]*testX,0)'''
 
                     # NNLS regression (as suggested by reviewer at SVRHM)
                     regr_coef,rnorm = nnls(trainX,trainITmean)
@@ -180,7 +172,7 @@ def main(layers):
                     #  Crossvalidation is done for individual test subjects not the mean.
                     testIT=IT[testsubj,:,:][:,teststim,:][:,:,teststim]
                     # For noise ceiling - lower bound, average of train subjects 
-                    trainITmean=squareform(np.mean(IT[trainsubj,:,:][:,teststim,:][:,:,teststim],axis=0),checks=False)
+                    trainITmean_4noiseceiling=squareform(np.mean(IT[trainsubj,:,:][:,teststim,:][:,:,teststim],axis=0),checks=False)
                     # For noise ceiling - upper bound, average of all subjects
                     allsubjITmean_teststim=squareform(allsubjITmean[teststim,:][:,teststim],checks=False)
                     allcorr=[]
@@ -193,21 +185,23 @@ def main(layers):
                         corr,pvalue=kendalltau(testXweightedmean,Y)
                         allcorr.append(corr)
                         # Noise ceiling, lower
-                        corr,pvalue=kendalltau(trainITmean,Y)
+                        corr,pvalue=kendalltau(trainITmean_4noiseceiling,Y)
                         allnl.append(corr)
                         # Noise ceiling, upper
                         corr,pvalue=kendalltau(allsubjITmean_teststim,Y)
                         allnu.append(corr)
 
-                    corr_model[bootstrap,crossval]=np.mean(allcorr)
-                    corr_nl[bootstrap,crossval]=np.mean(allnl)
-                    corr_nu[bootstrap,crossval]=np.mean(allnu)
+                    corr_model[bootstrap,crossval,i]=np.mean(allcorr)
+                    corr_nl[bootstrap,crossval,i]=np.mean(allnl)
+                    corr_nu[bootstrap,crossval,i]=np.mean(allnu)
 
-            # Average across cross validations
-            out_corr_model[model['name']] = corr_model
-            corr_model_xvalmean=np.mean(corr_model, axis=1) 
-            corr_nl_xvalmean=np.mean(corr_nl, axis=1) 
-            corr_nu_xvalmean=np.mean(corr_nu, axis=1) 
+        # Average across cross validations
+        for i,model in enumerate(model_list):
+            model_name=model['name']
+            out_corr_model[model_name] = corr_model[:,:,i]
+            corr_model_xvalmean=np.mean(corr_model[:,:,i], axis=1) 
+            corr_nl_xvalmean=np.mean(corr_nl[:,:,i], axis=1)
+            corr_nu_xvalmean=np.mean(corr_nu[:,:,i], axis=1)
 
             # Display
             print('Cross validated across subjects and items')
@@ -216,6 +210,7 @@ def main(layers):
             print(' Upper noise ceiling %f +/- %f'%(np.mean(corr_nu_xvalmean),scipy.stats.sem(corr_nu_xvalmean)))
             
             f.write('* Cross validated across subjects and items' + '\n')
+            f.write(f'## {model_name}' + '\n')
             f.write('Model mean          %f +/- %f'%(np.mean(corr_model_xvalmean),scipy.stats.sem(corr_model_xvalmean)) + '\n')
             f.write(' Lower noise ceiling %f +/- %f'%(np.mean(corr_nl_xvalmean),scipy.stats.sem(corr_nl_xvalmean)) + '\n')
             f.write(' Upper noise ceiling %f +/- %f'%(np.mean(corr_nu_xvalmean),scipy.stats.sem(corr_nu_xvalmean)) + '\n')

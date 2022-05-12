@@ -119,39 +119,65 @@ def corr_with_brain_plot(corr_df,method):
     sns.violinplot(x='layer', y='corr', hue='state', data=corr_df[corr_df['ROI']=='EVC'], ax=ax[0,0])
     ax[0,0].set_title('Comparison to EVC')
     if 'mri_variability' in method:
+        ax[0,0].set_ylim((-0.15,0.45))
         ax[0,0].axhline(0.38, color='grey', lw=2, alpha=0.4)
         ax[0,0].axhline(0.31, color='gray', lw=2, alpha=0.4)
         ax[0,0].axhspan(0.31, 0.38, facecolor='gray', alpha=0.4)
     else:
         layers_noise_ceiling(ax[0,0])
+        ax[0,0].set_ylim((-0.05,1.05))
 
     sns.violinplot(x='layer', y='corr', hue='state', data=corr_df[corr_df['ROI']=='IT'], ax=ax[0,1])
     ax[0,1].set_title('Comparison to IT')
     if 'mri_variability' in method:
+        ax[0,1].set_ylim((-0.15,0.45))
         ax[0,1].axhline(0.28, color='gray', lw=2, alpha=0.4)
         ax[0,1].axhline(0.42, color='gray', lw=2, alpha=0.4)
         ax[0,1].axhspan(0.28, 0.42, facecolor='gray', alpha=0.4)
     else:
         layers_noise_ceiling(ax[0,1])
+        ax[0,1].set_ylim((-0.05,1.05))
 
-    sns.lineplot(x="layer", y="corr", hue="state", data=corr_df[corr_df['ROI']=='EVC'], markers=True, dashes=False, ax=ax[1,0])    
+    sns.lineplot(x="layer", y="corr", hue="state", data=corr_df[corr_df['ROI']=='EVC'], markers=True, dashes=False, ax=ax[1,0], legend=False)    
     ax[1,0].set_title('Comparison to EVC')
     if 'mri_variability' in method:
+        ax[1,0].set_ylim((-0.015,0.45))
         ax[1,0].axhline(0.38, color='grey', lw=2, alpha=0.4)
         ax[1,0].axhline(0.31, color='gray', lw=2, alpha=0.4)
         ax[1,0].axhspan(0.31, 0.38, facecolor='gray', alpha=0.4)
     else:
         layers_noise_ceiling(ax[1,0])
+        ax[1,0].set_ylim((-0.05,1.05))
 
-    sns.lineplot(x="layer", y="corr", hue="state", data=corr_df[corr_df['ROI']=='IT'], markers=True, dashes=False, ax=ax[1,1])    
+    sns.lineplot(x="layer", y="corr", hue="state", data=corr_df[corr_df['ROI']=='IT'], markers=True, dashes=False, ax=ax[1,1], legend=False)    
     ax[1,1].set_title('Comparison to IT')
     if 'mri_variability' in method:
+        ax[1,1].set_ylim((-0.015,0.45))
         ax[1,1].axhline(0.28, color='gray', lw=2, alpha=0.4)
         ax[1,1].axhline(0.42, color='gray', lw=2, alpha=0.4)
         ax[1,1].axhspan(0.28, 0.42, facecolor='gray', alpha=0.4)
     else:
         layers_noise_ceiling(ax[1,1])
+        ax[1,1].set_ylim((-0.05,1.05))
 
+    if "layer_variability" in method:
+        ax[1,0].text(3, 0.60, "**", ha='center', va='bottom', fontsize=15)
+        ax[1,1].text(3, 0.60, "**", ha='center', va='bottom', fontsize=15)
+    else:
+        ax[1,0].text(0, 0.15, "***", ha='center', va='bottom', fontsize=10)
+        ax[1,0].text(1, 0.20, "***", ha='center', va='bottom', fontsize=10)
+        ax[1,0].text(2, 0.18, "**", ha='center', va='bottom', fontsize=10)
+        ax[1,0].text(3, 0.18, "***", ha='center', va='bottom', fontsize=10)
+        ax[1,0].text(4, 0.18, "***", ha='center', va='bottom', fontsize=10)
+        ax[1,0].text(5, 0.18, "**", ha='center', va='bottom', fontsize=10)
+        ax[1,0].text(6, 0.18, "*", ha='center', va='bottom', fontsize=10)
+
+        ax[1,1].text(0, 0.15, "***", ha='center', va='bottom', fontsize=10)        
+        ax[1,1].text(1, 0.18, "***", ha='center', va='bottom', fontsize=10)        
+        ax[1,1].text(2, 0.18, "***", ha='center', va='bottom', fontsize=10)        
+        ax[1,1].text(3, 0.18, "**", ha='center', va='bottom', fontsize=10)        
+        ax[1,1].text(4, 0.18, "*", ha='center', va='bottom', fontsize=10)        
+      
     plt.suptitle(f'{method}')
     plt.savefig(f'/home/annatruzzi/multiple_deepcluster/figures/corr_{method}.png')
 
@@ -200,7 +226,7 @@ def posthoc_tests(corr_df,method,layer,flag):
         print(f'{flag} - {layer}')
         dist_random = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='randomstate') & (corr_df['layer']==layer)]['corr']
         dist_trained = corr_df[(corr_df['ROI']==flag) & (corr_df['state']=='100epochs') & (corr_df['layer']==layer)]['corr']
-        res = mannwhitneyu(dist_random, dist_trained)
+        res = wilcoxon(dist_random, dist_trained)
         print(res)
         return res
 
@@ -219,7 +245,7 @@ if __name__ == '__main__':
                 f.write('KRUSKAL test \n')
                 stat_kruskal=corr_with_brain_anova(corr_df,method,flag=ROI)
                 f.write(f'{stat_kruskal} \n')
-                f.write('MANN WHITNEY test \n')
+                f.write('Wilcoxon test \n')
                 for layer in layers:
                     posthoc = posthoc_tests(corr_df,method,layer,flag=ROI)
                     f.write(f'{layer}: {posthoc} \n')

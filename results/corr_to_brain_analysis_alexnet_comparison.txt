@@ -1,0 +1,24 @@
+
+ ####### EVC 
+KRUSKAL test 
+KruskalResult(statistic=131.88341571227647, pvalue=1.7263570742244639e-18) 
+Wilcoxon test 
+ReLu1: WilcoxonResult(statistic=1.0, pvalue=0.0001220703125) 
+ReLu2: WilcoxonResult(statistic=4.0, pvalue=0.00042724609375) 
+ReLu3: WilcoxonResult(statistic=6.0, pvalue=0.0008544921875) 
+ReLu4: WilcoxonResult(statistic=1.0, pvalue=0.0001220703125) 
+ReLu5: WilcoxonResult(statistic=0.0, pvalue=6.103515625e-05) 
+ReLu6: WilcoxonResult(statistic=8.0, pvalue=0.00152587890625) 
+ReLu7: WilcoxonResult(statistic=8.0, pvalue=0.00152587890625) 
+
+ ####### IT 
+KRUSKAL test 
+KruskalResult(statistic=74.70522804902566, pvalue=3.0505080151546086e-08) 
+Wilcoxon test 
+ReLu1: WilcoxonResult(statistic=5.0, pvalue=0.0006103515625) 
+ReLu2: WilcoxonResult(statistic=4.0, pvalue=0.00042724609375) 
+ReLu3: WilcoxonResult(statistic=8.0, pvalue=0.00152587890625) 
+ReLu4: WilcoxonResult(statistic=24.0, pvalue=0.041259765625) 
+ReLu5: WilcoxonResult(statistic=14.0, pvalue=0.0067138671875) 
+ReLu6: WilcoxonResult(statistic=48.0, pvalue=0.52447509765625) 
+ReLu7: WilcoxonResult(statistic=48.0, pvalue=0.52447509765625) 

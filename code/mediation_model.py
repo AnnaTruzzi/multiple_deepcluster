@@ -214,6 +214,8 @@ def main():
 
     test_ROIs=['IT','EVC']
     test_nets=['dcrandom','dctrained','alexnettrained']
+#    test_ROIs=['EVC']
+#    test_nets=['alexnettrained']
     test_layers=['ReLu2','ReLu7']
     proportion_list=[]
     type_list=[]
@@ -245,7 +247,7 @@ def main():
                     tot=float(res['coef'][res['path']=='Total'])
                     direct=float(res['coef'][res['path']=='Direct'])
 
-                    proportion_list.extend([perc_indirect,sem_indirect])
+                    proportion_list.extend([perc_indirect/tot,sem_indirect/tot])
                     type_list.extend(['perceptual','semantic'])
                     ROI_list.extend(np.repeat(test_ROI,2))
                     net_list.extend(np.repeat(test_net,2))

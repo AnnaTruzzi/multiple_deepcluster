@@ -32,9 +32,13 @@ def main():
             sns.barplot(x="layer", y="proportion", hue = 'type',
             data=df[(df['net']==net) & (df['ROI']==ROI)], ax = ax[i], ci=None)
             ax[i].set(ylim=(0, 1))
-            ax[i].set_ylabel('Proportion of total effect explained')
+            if i==0:
+                ax[i].set_ylabel('Proportion of total effect explained')
+            else:
+                ax[i].set_ylabel('')
+                ax[i].yaxis.set_ticklabels([])
             ax[i].set_title(f'{net}')
-        plt.suptitle(f'ROI')
+        plt.suptitle(f'{ROI}')
         plt.savefig(f'/home/annatruzzi/multiple_deepcluster/figures/mediation_plots_{ROI}.png')
 
 

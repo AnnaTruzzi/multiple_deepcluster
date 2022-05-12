@@ -5,53 +5,53 @@ T TESTs
 MODELS COMPARISON
 ##### 
 #all-dctrained VS all-alexnettrained 
-t=-8.069398426623288e-14, p=0.9999999999999356 
+t=96.98635694254264, p=0.0 
 
 #all-dcrandom VS all-alexnettrained 
-t=9.239995321344494e-14, p=0.9999999999999263 
+t=71.08539309263115, p=0.0 
 
 #all-dcrandom VS all-dctrained 
-t=1.3923434010506275e-13, p=0.999999999999889 
+t=15.6832201558663, p=8.832568030033557e-55 
 
 #all-alexnettrained-with-dcrandom2 VS all-alexnettrained 
-t=-7.366166576470113e-15, p=0.9999999999999941 
+t=202.39627295762213, p=0.0 
 
 #all-alexnettrained-with-dcrandom2 VS all-dctrained 
-t=5.867525561698157e-14, p=0.9999999999999531 
+t=84.27499273691453, p=0.0 
 
 #all-alexnettrained-with-dcrandom2 VS all-dcrandom 
-t=-1.4521018492784995e-13, p=0.9999999999998841 
+t=67.12556685898343, p=0.0 
 
 #all-dctrained-with-dcrandom2 VS all-alexnettrained 
-t=-1.3947677461746552e-14, p=0.9999999999999889 
+t=196.54890556462547, p=0.0 
 
 #all-dctrained-with-dcrandom2 VS all-dctrained 
-t=7.214439736053038e-14, p=0.9999999999999425 
+t=172.1679739361496, p=0.0 
 
 #all-dctrained-with-dcrandom2 VS all-dcrandom 
-t=-1.4602546650426496e-13, p=0.9999999999998834 
+t=99.93294508289165, p=0.0 
 
 #all-dctrained-with-dcrandom2 VS all-alexnettrained-with-dcrandom2 
-t=-1.2945073446043189e-14, p=0.9999999999999897 
+t=57.67424324986746, p=0.0 
 
 #all-alexnettrained-with-dcrandom3 VS all-alexnettrained 
-t=4.2550365193836203e-14, p=0.999999999999966 
+t=164.0513784703978, p=0.0 
 
 #all-alexnettrained-with-dcrandom3 VS all-dctrained 
-t=9.60812243168438e-14, p=0.9999999999999234 
+t=45.53121391357502, p=0.0 
 
 #all-alexnettrained-with-dcrandom3 VS all-dcrandom 
-t=-9.941558605921856e-14, p=0.9999999999999207 
+t=24.262566914639656, p=2.0966170637314122e-126 
 
 #all-dctrained-with-dcrandom3 VS all-alexnettrained 
-t=-4.007571031866089e-14, p=0.999999999999968 
+t=180.715910302379, p=0.0 
 
 #all-dctrained-with-dcrandom3 VS all-dctrained 
-t=3.913580030744884e-14, p=0.9999999999999687 
+t=148.3814539875606, p=0.0 
 
 #all-dctrained-with-dcrandom3 VS all-dcrandom 
-t=-1.6399040417005026e-13, p=0.9999999999998692 
+t=73.1371629776297, p=0.0 
 
 #all-dctrained-with-dcrandom3 VS all-alexnettrained-with-dcrandom3 
-t=-1.0924579628660465e-13, p=0.9999999999999128 
+t=79.0259050570593, p=0.0 
 

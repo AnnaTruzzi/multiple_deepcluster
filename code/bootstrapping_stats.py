@@ -120,9 +120,10 @@ if __name__ == '__main__':
                     ['all-dctrained-with-dcrandom3','all-alexnettrained'],['all-dctrained-with-dcrandom3','all-dctrained'],['all-dctrained-with-dcrandom3','all-dcrandom'],['all-dctrained-with-dcrandom3','all-alexnettrained-with-dcrandom3']]
 
     grand_average = np.mean(np.array(list(corr_values.values())))
+    across_model_average = np.mean(np.array(list(corr_values.values())), axis=0)
     corr_values_mean_corrected = {}
     for key in corr_values.keys():
-        corr_values_mean_corrected[key] = corr_values[key].mean(axis=1) - np.mean(corr_values[key].mean(axis=1)) + grand_average
+        corr_values_mean_corrected[key] = np.mean((corr_values[key] - across_model_average + grand_average),axis=1)
         print(np.mean(corr_values_mean_corrected[key]))
 
     bootstrapping_confidenceinterval()
