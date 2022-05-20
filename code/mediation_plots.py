@@ -40,6 +40,7 @@ def main():
             ax[i].set_title(f'{net}')
         plt.suptitle(f'{ROI}')
         plt.savefig(f'/home/annatruzzi/multiple_deepcluster/figures/mediation_plots_{ROI}.png')
+        plt.savefig(f'/home/annatruzzi/multiple_deepcluster/figures/mediation_plots_{ROI}.pdf')
 
 
 if __name__ == '__main__':

@@ -49,7 +49,7 @@ def corr_with_brain_plot(dataframe,flag):
         
     sns.lineplot(x="layer", y="corr", hue="net_type", data=dataframe[dataframe['ROI']=='IT'], markers=True, dashes=False, ax=ax[1],legend=False)    
     ax[1].set_title('Comparison to IT')
-    ax[1].set_ylim((-0.05,0.45))
+    ax[1].set_ylim((-0.015,0.45))
     ax[1].axhline(0.28, color='gray', lw=2, alpha=0.4)
     ax[1].axhline(0.42, color='gray', lw=2, alpha=0.4)
     ax[1].axhspan(0.28, 0.42, facecolor='gray', alpha=0.4)
