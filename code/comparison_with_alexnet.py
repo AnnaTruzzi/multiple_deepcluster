@@ -34,10 +34,10 @@ from scipy.stats import wilcoxon
 def corr_with_brain_plot(dataframe,flag):
     if flag != 'with_dctrained':
         dataframe = dataframe[dataframe['net_type']!='dc100epochs']
-        costum_palette = [sns.xkcd_rgb['blue'],sns.xkcd_rgb['green']]
+        costum_palette = [sns.xkcd_rgb['ocean blue'],sns.xkcd_rgb['green']]
         sns.set_palette(costum_palette)
     else:
-        costum_palette = [sns.xkcd_rgb['blue'],sns.xkcd_rgb['orange'],sns.xkcd_rgb['green']]
+        costum_palette = [sns.xkcd_rgb['ocean blue'],sns.xkcd_rgb['orange'],sns.xkcd_rgb['green']]
         sns.set_palette(costum_palette)
     fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(10,5))
     sns.lineplot(x="layer", y="corr", hue="net_type", data=dataframe[dataframe['ROI']=='EVC'], markers=True, dashes=False, ax=ax[0],legend=False)    

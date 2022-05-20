@@ -116,6 +116,8 @@ def layers_noise_ceiling(axes):
 
 def corr_with_brain_plot(corr_df,method):
     fig, ax = plt.subplots(nrows=2, ncols=2, figsize=(10,10))
+    costum_palette = [sns.xkcd_rgb['ocean blue'],sns.xkcd_rgb['orange']]
+    sns.set_palette(costum_palette)
     sns.violinplot(x='layer', y='corr', hue='state', data=corr_df[corr_df['ROI']=='EVC'], ax=ax[0,0])
     ax[0,0].set_title('Comparison to EVC')
     if 'mri_variability' in method:
@@ -176,7 +178,7 @@ def corr_with_brain_plot(corr_df,method):
         ax[1,1].text(1, 0.18, "***", ha='center', va='bottom', fontsize=10)        
         ax[1,1].text(2, 0.18, "***", ha='center', va='bottom', fontsize=10)        
         ax[1,1].text(3, 0.18, "**", ha='center', va='bottom', fontsize=10)        
-        ax[1,1].text(4, 0.18, "*", ha='center', va='bottom', fontsize=10)        
+ 
       
     plt.suptitle(f'{method}')
     plt.savefig(f'/home/annatruzzi/multiple_deepcluster/figures/corr_{method}.png')
