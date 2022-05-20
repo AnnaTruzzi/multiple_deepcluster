@@ -70,6 +70,7 @@ def corr_with_brain_plot(dataframe,flag):
         ax[1].text(4, 0.18, "**", ha='center', va='bottom', fontsize=10)
 
     plt.savefig(f'/home/annatruzzi/multiple_deepcluster/figures/comparison_to_alexnet{flag}.png')
+    plt.savefig(f'/home/annatruzzi/multiple_deepcluster/figures/comparison_to_alexnet{flag}.pdf')
 
 
 def corr_with_brain_anova(corr_df,flag):

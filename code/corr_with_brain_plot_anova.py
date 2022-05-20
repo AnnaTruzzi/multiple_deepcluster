@@ -182,6 +182,7 @@ def corr_with_brain_plot(corr_df,method):
       
     plt.suptitle(f'{method}')
     plt.savefig(f'/home/annatruzzi/multiple_deepcluster/figures/corr_{method}.png')
+    plt.savefig(f'/home/annatruzzi/multiple_deepcluster/figures/corr_{method}.pdf')
 
 
 def corr_with_brain_check_dist(corr_df,method):
