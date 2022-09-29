@@ -1,5 +1,4 @@
 import os
-import scipy.io
 import pickle
 import numpy as np
 from itertools import compress
@@ -11,7 +10,6 @@ from matplotlib import pyplot as plt
 import re
 from scipy.cluster.hierarchy import dendrogram, linkage
 from itertools import combinations
-import scipy.io
 import h5py
 import hdf5storage
 from scipy import stats
@@ -136,6 +134,9 @@ def main():
     all_ROIs = {'IT_mean_corrected': IT_mean_corrected,
                 'EVC_mean_corrected':EVC_mean_corrected}
 
+    all_ROIs_allsubj = {'IT': IT,
+                'EVC':EVC}
+
     ############  Semantic features
     semantic_features_vec = np.array([1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,
                 3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5,5,
@@ -217,6 +218,8 @@ def main():
 #    test_ROIs=['EVC']
 #    test_nets=['alexnettrained']
     test_layers=['ReLu2','ReLu7']
+
+    '''
     proportion_list=[]
     type_list=[]
     ROI_list=[]
@@ -264,7 +267,7 @@ def main():
                     f.write('\n' + 'Proportion of total for indirect perceptual %0.3f  semantic %0.3f'%(perc_indirect/tot, sem_indirect/tot))
                     f.write('\n' + 'Proportion of total for indirect overall %0.3f'%((perc_indirect+sem_indirect)/tot))
                     f.write('\n')
-
+        
     out_dict = {'proportion': proportion_list,
                 'type': type_list,
                 'ROI': ROI_list,
@@ -272,6 +275,47 @@ def main():
                 'layer': out_layer_list}
     out_df = pd.DataFrame(out_dict)
     out_df.to_csv('/home/annatruzzi/multiple_deepcluster/results/mediation_proportion_to_total.csv')
+    '''
+    
+    proportion_list_allsubj=[]
+    type_list_allsubj=[]
+    ROI_list_allsubj=[]
+    net_list_allsubj=[]
+    out_layer_list_allsubj=[]
+
+    for test_ROI in test_ROIs:
+        for test_net in test_nets:
+            for test_layer in test_layers:
+                for subj in range(0,IT.shape[0]):
+                    subj_rdm = squareform(all_ROIs_allsubj[f'{test_ROI}'][subj],checks=False)
+                    subj_rdm_mean_corrected = subj_rdm - np.mean(subj_rdm)
+                    dfcols={f'{test_net}': all_nets[f'{test_net}'][f'{test_net}_{test_layer}'], f'{test_ROI}':subj_rdm_mean_corrected}
+                    for feat in all_feats:
+                        dfcols[feat]=feat_rdms[feat]    
+                    df=pd.DataFrame(dfcols)
+                    res =pg.mediation_analysis(data=df, x=test_net, m=all_feats, y=test_ROI, alpha=0.05, seed=42, return_dist=False)
+                    print(res)
+
+                    # Extract key values
+                    perc_indirect=np.sum([float(res['coef'][res['path']=='Indirect '+f]) for f in perc_feats])
+                    sem_indirect=np.sum([float(res['coef'][res['path']=='Indirect '+f]) for f in sem_feats])
+                    tot=float(res['coef'][res['path']=='Total'])
+                    direct=float(res['coef'][res['path']=='Direct'])
+
+                    proportion_list_allsubj.extend([perc_indirect/tot,sem_indirect/tot])
+                    type_list_allsubj.extend(['perceptual','semantic'])
+                    ROI_list_allsubj.extend(np.repeat(test_ROI,2))
+                    net_list_allsubj.extend(np.repeat(test_net,2))
+                    out_layer_list_allsubj.extend(np.repeat(test_layer,2))                   
+
+    out_dict_allsubj = {'proportion': proportion_list_allsubj,
+                'type': type_list_allsubj,
+                'ROI': ROI_list_allsubj,
+                'net': net_list_allsubj,
+                'layer': out_layer_list_allsubj}
+    out_df_allsubj = pd.DataFrame(out_dict_allsubj)
+    out_df_allsubj.to_csv('/home/annatruzzi/multiple_deepcluster/results/mediation_proportion_to_total_allsubj.csv')
+
 
 if __name__ == '__main__':
     layers = ['ReLu1', 'ReLu2', 'ReLu3', 'ReLu4', 'ReLu5','ReLu6','ReLu7']
