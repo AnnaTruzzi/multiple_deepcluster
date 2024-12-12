@@ -135,7 +135,7 @@ if __name__ == '__main__':
     layers = ['ReLu1', 'ReLu2', 'ReLu3', 'ReLu4', 'ReLu5','ReLu6','ReLu7']
     for instance in range(1,instances):
         for state in states:
-            print 'getting activations for instance %d %s' % (instance, state)
+            print ('getting activations for instance %d %s') % (instance, state)
             modelpth = '/data/multiple_deepcluster/deepcluster_checkpoints/dc_%d/' % instance
             if 'random' in state:
                 checkpoint = torch.load(modelpth+'checkpoint_dc%d_randomstate.pth.tar' % instance)['state_dict']

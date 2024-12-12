@@ -115,7 +115,7 @@ if __name__ == '__main__':
                 for state in states_dc:
                     net = 'dc'
                     act_pth = '/data/multiple_deepcluster/activations_niko92_imgs/activations_%s_dc%d.pickle' % (state,instance)
-                    #main(net,instance, state)
+                    main(net,instance, state)
         else:
             for instance in range(0,instances_alexnet):
                 for state in states_alexnet:

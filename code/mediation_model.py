@@ -282,6 +282,7 @@ def main():
     ROI_list_allsubj=[]
     net_list_allsubj=[]
     out_layer_list_allsubj=[]
+    indirect_sum=[]
 
     for test_ROI in test_ROIs:
         for test_net in test_nets:
@@ -303,6 +304,7 @@ def main():
                     direct=float(res['coef'][res['path']=='Direct'])
 
                     proportion_list_allsubj.extend([perc_indirect/tot,sem_indirect/tot])
+                    indirect_sum.extend([perc_indirect,sem_indirect])
                     type_list_allsubj.extend(['perceptual','semantic'])
                     ROI_list_allsubj.extend(np.repeat(test_ROI,2))
                     net_list_allsubj.extend(np.repeat(test_net,2))
@@ -312,7 +314,8 @@ def main():
                 'type': type_list_allsubj,
                 'ROI': ROI_list_allsubj,
                 'net': net_list_allsubj,
-                'layer': out_layer_list_allsubj}
+                'layer': out_layer_list_allsubj,
+                'sum':indirect_sum}
     out_df_allsubj = pd.DataFrame(out_dict_allsubj)
     out_df_allsubj.to_csv('/home/annatruzzi/multiple_deepcluster/results/mediation_proportion_to_total_allsubj.csv')
 

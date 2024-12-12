@@ -30,15 +30,15 @@ def main():
     for ROI in ROIs:
         fig, ax = plt.subplots(nrows=1, ncols=3)
         for i,net in enumerate(networks):
-            sns.barplot(x="layer", y="proportion", hue = 'type',
+            sns.barplot(x="layer", y="sum", hue = 'type',
             data=df[(df['net']==net) & (df['ROI']==ROI)], ax = ax[i], ci=None)
             x_coords = [p.get_x() + 0.5*p.get_width() for p in ax[i].patches]
             y_coords = [p.get_height() for p in ax[i].patches]
-            plt.errorbar(x_coords, y_coords, fmt='none', yerr=[sem((np.array(df[(df['net']==net) & (df['ROI']==ROI) & (df['type']=='perceptual') & (df['layer']=='ReLu2')]['proportion'])-np.array(df[(df['net']==net) & (df['ROI']==ROI) & (df['type']=='semantic') & (df['layer']=='ReLu2')]['proportion']))/2),
+            ax[i].errorbar(x_coords, y_coords, fmt='none', yerr=[sem((np.array(df[(df['net']==net) & (df['ROI']==ROI) & (df['type']=='perceptual') & (df['layer']=='ReLu2')]['proportion'])-np.array(df[(df['net']==net) & (df['ROI']==ROI) & (df['type']=='semantic') & (df['layer']=='ReLu2')]['proportion']))/2),
                         sem((np.array(df[(df['net']==net) & (df['ROI']==ROI) & (df['type']=='perceptual') & (df['layer']=='ReLu2')]['proportion'])-np.array(df[(df['net']==net) & (df['ROI']==ROI) & (df['type']=='semantic') & (df['layer']=='ReLu2')]['proportion']))/2),
-                        sem((np.array(df[(df['net']==net) & (df['ROI']==ROI) & (df['type']=='perceptual') & (df['layer']=='ReLu2')]['proportion'])-np.array(df[(df['net']==net) & (df['ROI']==ROI) & (df['type']=='semantic') & (df['layer']=='ReLu7')]['proportion']))/2),
-                        sem((np.array(df[(df['net']==net) & (df['ROI']==ROI) & (df['type']=='perceptual') & (df['layer']=='ReLu2')]['proportion'])-np.array(df[(df['net']==net) & (df['ROI']==ROI) & (df['type']=='semantic') & (df['layer']=='ReLu7')]['proportion']))/2)], c="black", elinewidth=2)
-            ax[i].set(ylim=(0, 1.3))
+                        sem((np.array(df[(df['net']==net) & (df['ROI']==ROI) & (df['type']=='perceptual') & (df['layer']=='ReLu7')]['proportion'])-np.array(df[(df['net']==net) & (df['ROI']==ROI) & (df['type']=='semantic') & (df['layer']=='ReLu7')]['proportion']))/2),
+                        sem((np.array(df[(df['net']==net) & (df['ROI']==ROI) & (df['type']=='perceptual') & (df['layer']=='ReLu7')]['proportion'])-np.array(df[(df['net']==net) & (df['ROI']==ROI) & (df['type']=='semantic') & (df['layer']=='ReLu7')]['proportion']))/2)], c="black", elinewidth=2)
+            ax[i].set(ylim=(0, 1))
             if i==0:
                 ax[i].set_ylabel('Proportion of total effect explained')
             else:
@@ -46,8 +46,8 @@ def main():
                 ax[i].yaxis.set_ticklabels([])
             ax[i].set_title(f'{net}')
         plt.suptitle(f'{ROI}')
-        plt.savefig(f'/home/annatruzzi/multiple_deepcluster/figures/mediation_plots_{ROI}_allsubj.png')
-        plt.savefig(f'/home/annatruzzi/multiple_deepcluster/figures/mediation_plots_{ROI}_allsubj.pdf')
+        plt.savefig(f'/home/annatruzzi/multiple_deepcluster/figures/mediation_plots_{ROI}_allsubj_sum.png')
+        plt.savefig(f'/home/annatruzzi/multiple_deepcluster/figures/mediation_plots_{ROI}_allsubj_sum.pdf')
 
 
 if __name__ == '__main__':
